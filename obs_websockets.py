@@ -18,9 +18,9 @@ class OBSWebsocketsManager:
         try:
             self.ws.connect()
         except:
-            print("COULD NOT CONNECT TO OBS!\nDouble check that you have OBS open, your secrets are correct, and that your websockets server is enabled in OBS.")
+            print("\nCOULD NOT CONNECT TO OBS!\nDouble check that you have OBS open, your secrets are correct, and that your websockets server is enabled in OBS.")
             time.sleep(10)
-            sys.exit()
+            sys.exit(1)
         print("Connected to OBS Websockets!\n")
 
     def disconnect(self):
@@ -90,6 +90,3 @@ class OBSWebsocketsManager:
     # Get list of all items in a certain scene
     def get_scene_items(self, scene_name):
         return self.ws.call(requests.GetSceneItemList(sceneName=scene_name))
-
-print("Connecting to OBS Websockets")
-obswebsockets_manager = OBSWebsocketsManager()
