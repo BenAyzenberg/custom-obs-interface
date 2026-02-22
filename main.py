@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 import time
 
-load_dotenv()
+load_dotenv('./secrets.env')
 
 # Load environment variables
     
@@ -21,7 +21,7 @@ if not all([OBS_PORT, OBS_PASSWORD]):
     exit(1)
 
 print("Connecting to OBS Websockets")
-obs = OBSWebsocketsManager()
+obs = OBSWebsocketsManager(OBS_PORT, OBS_PASSWORD)
     
 # Validate credentials
 if not all([CLIENT_ID, ACCESS_TOKEN, BROADCASTER_ID]):
@@ -45,6 +45,7 @@ try:
         redemption = twitch.process_redemptions()
             
         if redemption:
+            #TODO: find redemption process in obs or whatever it is
             print(f"✓ Processed redemption from {redemption['user_name']}")
             twitch.update_redemption_status(redemption['id'], 'FULFILLED')
             

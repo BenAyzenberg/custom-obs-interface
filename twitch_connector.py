@@ -232,7 +232,7 @@ class TwitchConnectorManager:
         params = {
             'id': redemption_id,
             'broadcaster_id': self.broadcaster_id,
-            'reward_id': 'YOUR_REWARD_ID',  # You'd need to track this
+            'reward_id': redemption_id,  # You'd need to track this
         }
         
         payload = {'status': status}
