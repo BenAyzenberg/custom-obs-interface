@@ -4,23 +4,18 @@ import os
 import time
 import sys
 
-load_dotenv('./secrets.env')
-
-obsPort = os.getenv('OBS_PORT')
-obsPassword = os.getenv('OBS_PASSWORD')
-
 class OBSWebsocketsManager:
     ws = None
     
-    def __init__(self):
+    def __init__(self, obsPort, obsPassword):
         # Connect to websockets
         self.ws = obsws('localhost', obsPort, obsPassword)
         try:
             self.ws.connect()
         except:
-            print("COULD NOT CONNECT TO OBS!\nDouble check that you have OBS open, your secrets are correct, and that your websockets server is enabled in OBS.")
-            time.sleep(10)
-            sys.exit()
+            print("\nCOULD NOT CONNECT TO OBS!\nDouble check that you have OBS open, your secrets are correct, and that your websockets server is enabled in OBS.")
+            time.sleep(1)
+            sys.exit(1)
         print("Connected to OBS Websockets!\n")
 
     def disconnect(self):
@@ -90,6 +85,3 @@ class OBSWebsocketsManager:
     # Get list of all items in a certain scene
     def get_scene_items(self, scene_name):
         return self.ws.call(requests.GetSceneItemList(sceneName=scene_name))
-
-print("Connecting to OBS Websockets")
-obswebsockets_manager = OBSWebsocketsManager()
