@@ -2,4 +2,5 @@
 /.venv
 /.vscode
 /.vs
+/SoundEffects/*
 __pycache__

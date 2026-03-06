@@ -253,7 +253,7 @@ class TwitchConnectorManager:
 # Example usage
 if __name__ == "__main__":
     # Load environment variables
-    load_dotenv()
+    load_dotenv('./secrets.env')
     
     # Get credentials from .env file
     CLIENT_ID = os.getenv('TWITCH_CLIENT_ID')
