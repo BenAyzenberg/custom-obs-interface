@@ -24,15 +24,22 @@ class OBSWebsocketsManager:
     def set_scene(self, new_scene):
         self.ws.call(requests.SetCurrentProgramScene(sceneName=new_scene))
 
+    def get_active_scene(self):
+        response = self.ws.call(requests.GetCurrentProgramScene())
+        return response.datain['sceneName']
+
     # Set the visibility of any source's filters
     def set_filter_visibility(self, source_name, filter_name, filter_enabled=True):
         self.ws.call(requests.SetSourceFilterEnabled(sourceName=source_name, filterName=filter_name, filterEnabled=filter_enabled))
 
     # Set the visibility of any source
     def set_source_visibility(self, scene_name, source_name, source_visible=True):
-        response = self.ws.call(requests.GetSceneItemId(sceneName=scene_name, sourceName=source_name))
-        myItemID = response.datain['sceneItemId']
-        self.ws.call(requests.SetSceneItemEnabled(sceneName=scene_name, sceneItemId=myItemID, sceneItemEnabled=source_visible))
+        try:
+            response = self.ws.call(requests.GetSceneItemId(sceneName=scene_name, sourceName=source_name))
+            myItemID = response.datain['sceneItemId']
+            self.ws.call(requests.SetSceneItemEnabled(sceneName=scene_name, sceneItemId=myItemID, sceneItemEnabled=source_visible))
+        except:
+            print("ERROR\nScene does not have the proper item")
 
     # Returns the current text of a text source
     def get_text(self, source_name):
@@ -85,3 +92,26 @@ class OBSWebsocketsManager:
     # Get list of all items in a certain scene
     def get_scene_items(self, scene_name):
         return self.ws.call(requests.GetSceneItemList(sceneName=scene_name))
+
+if __name__ == '__main__':
+
+    load_dotenv('./secrets.env')
+
+    # Load environment variables
+    
+    # Get credentials from .env file
+    OBS_PORT = os.getenv('OBS_PORT')
+    OBS_PASSWORD = os.getenv('OBS_PASSWORD')
+
+    if not all([OBS_PORT, OBS_PASSWORD]):
+        print("Error: Missing required environment variables")
+        print("Please set OBS_PORT, OBS_PASSWORDin your secrets.env file")
+        exit(1)
+
+    print("Connecting to OBS Websockets")
+    obs = OBSWebsocketsManager(OBS_PORT, OBS_PASSWORD)
+
+    print("Beginning test")
+    print(obs.get_active_scene())
+
+    print("Test complete")
