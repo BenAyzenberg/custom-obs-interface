@@ -1,0 +1,5 @@
+obs-websocket-py
+python-dotenv
+pygame
+requests
+websocket-client
